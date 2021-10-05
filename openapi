@@ -1,0 +1,125 @@
+---
+openapi: 3.0.3
+info:
+  title: quarkus-challenge API
+  version: 1.0.0-SNAPSHOT
+paths:
+  /books:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        "200":
+          description: OK
+  /books/all:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+  /books/byName/{name}:
+    get:
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+  /books/byPublicationYearBetween/{lowerYear}/{higherYear}:
+    get:
+      parameters:
+      - name: higherYear
+        in: path
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - name: lowerYear
+        in: path
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Books'
+  /books/delete/{id}:
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          description: OK
+  /books/update/{id}:
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        publicationYear:
+          format: int32
+          minimum: 1900
+          type: integer
+    Books:
+      type: object
+      properties:
+        bookList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+        totalCount:
+          format: int64
+          type: integer
+        booksList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
